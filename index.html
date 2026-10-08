@@ -3,30 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Timer</title>
+<title>My Custom Timer</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
+    min-height: 100vh;
     font-family: Arial, sans-serif;
-    background: #f5f5f5;
+
     color: #222;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.35),
+            rgba(255,255,255,0.35)
+        ),
+        url("background.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
     transition: 0.25s;
 }
 
 body.dark {
-    background: #181818;
     color: #f5f5f5;
+
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,0.55),
+            rgba(0,0,0,0.55)
+        ),
+        url("background.jpg");
 }
 
 .container {
-    max-width: 650px;
-    margin: 40px auto;
-    padding: 25px;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 35px 20px;
 }
 
 .top {
@@ -38,6 +59,7 @@ body.dark {
 
 h1 {
     margin: 0;
+    font-size: 28px;
 }
 
 .theme {
@@ -45,54 +67,68 @@ h1 {
     border-radius: 10px;
     padding: 10px 14px;
     cursor: pointer;
-    background: #e0e0e0;
+    background: rgba(255,255,255,0.8);
+    color: #222;
+    font-size: 14px;
 }
 
 .dark .theme {
-    background: #333;
+    background: rgba(40,40,40,0.9);
     color: white;
 }
 
 .timer-box {
-    background: white;
-    border-radius: 20px;
+    background: rgba(255,255,255,0.88);
+    border-radius: 22px;
     padding: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+    backdrop-filter: blur(8px);
 }
 
 .dark .timer-box {
-    background: #242424;
+    background: rgba(30,30,30,0.88);
 }
 
 .display {
-    font-size: clamp(55px, 13vw, 100px);
+    font-size: clamp(55px, 13vw, 105px);
     font-weight: bold;
-    margin: 10px 0 25px;
+    text-align: center;
+    margin: 10px 0 30px;
+
     font-variant-numeric: tabular-nums;
 }
 
 .inputs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
 }
 
 .inputs label {
     display: block;
     font-size: 14px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .inputs input {
     width: 100%;
     padding: 12px;
+
     font-size: 18px;
-    border: 1px solid #ccc;
+
+    border: 1px solid #bbb;
     border-radius: 10px;
+
     text-align: center;
-    background: inherit;
-    color: inherit;
+
+    background: rgba(255,255,255,0.7);
+    color: #222;
+}
+
+.dark .inputs input {
+    background: rgba(60,60,60,0.8);
+    color: white;
+    border-color: #555;
 }
 
 .buttons {
@@ -100,14 +136,18 @@ h1 {
     gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
+
     margin-top: 20px;
 }
 
 button {
     padding: 11px 18px;
+
     border: none;
     border-radius: 10px;
+
     cursor: pointer;
+
     font-size: 15px;
 }
 
@@ -122,17 +162,20 @@ button {
 }
 
 .status {
+    text-align: center;
     margin-top: 15px;
     opacity: 0.7;
 }
 
+/* SAVED TIMERS */
+
 .saved {
-    margin-top: 25px;
-    text-align: left;
+    margin-top: 30px;
 }
 
 .saved h2 {
     font-size: 20px;
+    margin-bottom: 12px;
 }
 
 .saved-list {
@@ -144,21 +187,23 @@ button {
 .saved-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 .saved-item button {
-    background: #e9e9e9;
+    background: rgba(230,230,230,0.9);
 }
 
 .dark .saved-item button {
-    background: #333;
+    background: #444;
     color: white;
 }
 
 .delete {
-    padding: 8px 10px !important;
+    padding: 8px 10px;
 }
+
+/* SAVE AREA */
 
 .save-area {
     display: flex;
@@ -168,11 +213,20 @@ button {
 
 .save-area input {
     flex: 1;
+
     padding: 11px;
-    border: 1px solid #ccc;
+
+    border: 1px solid #bbb;
     border-radius: 10px;
-    background: inherit;
-    color: inherit;
+
+    background: rgba(255,255,255,0.7);
+    color: #222;
+}
+
+.dark .save-area input {
+    background: #333;
+    color: white;
+    border-color: #555;
 }
 
 .save-area button {
@@ -184,358 +238,816 @@ button {
     color: white;
 }
 
+/* MUSIC */
+
+.music-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(120,120,120,0.3);
+}
+
+.music-section h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.music-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.music-controls button {
+    background: #ddd;
+}
+
+.dark .music-controls button {
+    background: #444;
+    color: white;
+}
+
+.volume {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume input {
+    width: 120px;
+}
+
+.music-option {
+    display: block;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+.music-option input {
+    margin-right: 7px;
+}
+
+
+/* MOBILE */
+
 @media (max-width: 500px) {
+
     .container {
-        margin: 15px auto;
-        padding: 12px;
+        padding: 15px 12px;
     }
 
     .timer-box {
         padding: 20px 15px;
     }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    .inputs {
+        gap: 7px;
+    }
+
+    .music-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="container">
 
     <div class="top">
+
         <h1>⏱️ My Timer</h1>
-        <button class="theme" id="themeBtn">🌙 Dark</button>
+
+        <button
+            class="theme"
+            id="themeBtn">
+            🌙 Dark
+        </button>
+
     </div>
+
 
     <div class="timer-box">
 
-        <div class="display" id="display">00:10:00</div>
+
+        <!-- TIMER -->
+
+        <div
+            class="display"
+            id="display">
+            00:10:00
+        </div>
+
+
+        <!-- TIME INPUT -->
 
         <div class="inputs">
+
             <div>
+
                 <label>Hours</label>
-                <input id="hours" type="number" min="0" max="99" value="0">
+
+                <input
+                    id="hours"
+                    type="number"
+                    min="0"
+                    max="99"
+                    value="0">
+
             </div>
 
+
             <div>
+
                 <label>Minutes</label>
-                <input id="minutes" type="number" min="0" max="59" value="10">
+
+                <input
+                    id="minutes"
+                    type="number"
+                    min="0"
+                    max="59"
+                    value="10">
+
             </div>
 
+
             <div>
+
                 <label>Seconds</label>
-                <input id="seconds" type="number" min="0" max="59" value="0">
+
+                <input
+                    id="seconds"
+                    type="number"
+                    min="0"
+                    max="59"
+                    value="0">
+
             </div>
+
         </div>
+
+
+        <!-- BUTTONS -->
 
         <div class="buttons">
-            <button class="start" id="start">▶ Start</button>
-            <button id="pause">⏸ Pause</button>
-            <button id="reset">↻ Reset</button>
+
+            <button
+                class="start"
+                id="start">
+                ▶ Start
+            </button>
+
+            <button id="pause">
+                ⏸ Pause
+            </button>
+
+            <button id="reset">
+                ↻ Reset
+            </button>
+
         </div>
 
-        <div class="status" id="status">Ready</div>
+
+        <div
+            class="status"
+            id="status">
+            Ready
+        </div>
+
+
+
+        <!-- SAVED TIMERS -->
 
         <div class="saved">
+
             <h2>⭐ Saved Timers</h2>
 
-            <div class="saved-list" id="savedList"></div>
+            <div
+                class="saved-list"
+                id="savedList">
+            </div>
+
 
             <div class="save-area">
-                <input id="timerName" type="text"
-                       placeholder="Name this timer (e.g. Study 10 min)">
-                <button id="save">💾 Save</button>
+
+                <input
+                    id="timerName"
+                    type="text"
+                    placeholder="Name this timer">
+
+                <button id="save">
+                    💾 Save
+                </button>
+
             </div>
+
         </div>
 
+
+
+        <!-- MUSIC -->
+
+        <div class="music-section">
+
+            <h2>🎵 Background Music</h2>
+
+
+            <div class="music-controls">
+
+                <button id="musicBtn">
+                    🎵 Play Music
+                </button>
+
+
+                <div class="volume">
+
+                    🔊
+
+                    <input
+                        id="volume"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="0.5">
+
+                </div>
+
+            </div>
+
+
+            <label class="music-option">
+
+                <input
+                    type="checkbox"
+                    id="stopMusicOnFinish">
+
+                Stop music when timer finishes
+
+            </label>
+
+        </div>
+
+
     </div>
+
 </div>
+
+
+
+<!-- MUSIC FILE -->
+
+<audio
+    id="backgroundMusic"
+    loop>
+
+    <source
+        src="background-song.mp3"
+        type="audio/mpeg">
+
+</audio>
+
 
 
 <script>
 
+
+/* =========================
+   TIMER
+========================= */
+
 let totalSeconds = 600;
+
 let running = false;
+
 let endTime = null;
+
 let interval = null;
 
 
-/* ---------- ELEMENTS ---------- */
+const display =
+    document.getElementById("display");
 
-const display = document.getElementById("display");
-const hours = document.getElementById("hours");
-const minutes = document.getElementById("minutes");
-const seconds = document.getElementById("seconds");
-const status = document.getElementById("status");
-const savedList = document.getElementById("savedList");
+const hours =
+    document.getElementById("hours");
 
+const minutes =
+    document.getElementById("minutes");
 
-/* ---------- TIMER ---------- */
+const seconds =
+    document.getElementById("seconds");
+
+const status =
+    document.getElementById("status");
+
 
 function getInputSeconds() {
 
-    let h = Math.max(0, Number(hours.value) || 0);
-    let m = Math.max(0, Math.min(59, Number(minutes.value) || 0));
-    let s = Math.max(0, Math.min(59, Number(seconds.value) || 0));
+    let h =
+        Math.max(
+            0,
+            Number(hours.value) || 0
+        );
+
+    let m =
+        Math.max(
+            0,
+            Math.min(
+                59,
+                Number(minutes.value) || 0
+            )
+        );
+
+    let s =
+        Math.max(
+            0,
+            Math.min(
+                59,
+                Number(seconds.value) || 0
+            )
+        );
 
     return h * 3600 + m * 60 + s;
 }
 
 
+
 function formatTime(total) {
 
-    total = Math.max(0, Math.ceil(total));
+    total =
+        Math.max(
+            0,
+            Math.ceil(total)
+        );
 
-    let h = Math.floor(total / 3600);
-    let m = Math.floor((total % 3600) / 60);
-    let s = total % 60;
+    let h =
+        Math.floor(total / 3600);
 
-    return String(h).padStart(2, "0") + ":" +
-           String(m).padStart(2, "0") + ":" +
-           String(s).padStart(2, "0");
+    let m =
+        Math.floor(
+            (total % 3600) / 60
+        );
+
+    let s =
+        total % 60;
+
+
+    return (
+        String(h).padStart(2,"0")
+        + ":" +
+        String(m).padStart(2,"0")
+        + ":" +
+        String(s).padStart(2,"0")
+    );
 }
+
 
 
 function updateDisplay() {
-    display.textContent = formatTime(totalSeconds);
+
+    display.textContent =
+        formatTime(totalSeconds);
+
 }
+
 
 
 function startTimer() {
 
-    if (running) return;
-
-    if (totalSeconds <= 0) {
-        totalSeconds = getInputSeconds();
-    }
-
-    if (totalSeconds <= 0) {
-        status.textContent = "Set a time first!";
+    if (running)
         return;
+
+
+    if (totalSeconds <= 0) {
+
+        totalSeconds =
+            getInputSeconds();
+
     }
+
+
+    if (totalSeconds <= 0) {
+
+        status.textContent =
+            "Set a time first!";
+
+        return;
+
+    }
+
 
     running = true;
-    status.textContent = "Running...";
 
-    endTime = Date.now() + totalSeconds * 1000;
+    status.textContent =
+        "Running...";
 
-    interval = setInterval(() => {
 
-        totalSeconds = Math.max(
-            0,
-            (endTime - Date.now()) / 1000
-        );
+    endTime =
+        Date.now()
+        + totalSeconds * 1000;
 
-        updateDisplay();
 
-        if (totalSeconds <= 0) {
-            finishTimer();
-        }
+    interval =
+        setInterval(() => {
 
-    }, 100);
+
+            totalSeconds =
+                Math.max(
+                    0,
+                    (endTime - Date.now()) / 1000
+                );
+
+
+            updateDisplay();
+
+
+            if (totalSeconds <= 0) {
+
+                finishTimer();
+
+            }
+
+
+        },100);
+
 }
+
 
 
 function pauseTimer() {
 
-    if (!running) return;
+    if (!running)
+        return;
+
 
     running = false;
+
     clearInterval(interval);
 
-    totalSeconds = Math.max(
-        0,
-        (endTime - Date.now()) / 1000
-    );
 
-    status.textContent = "Paused";
+    totalSeconds =
+        Math.max(
+            0,
+            (endTime - Date.now()) / 1000
+        );
+
+
+    status.textContent =
+        "Paused";
+
+
     updateDisplay();
+
 }
+
 
 
 function resetTimer() {
 
     running = false;
+
     clearInterval(interval);
 
-    totalSeconds = getInputSeconds();
 
-    status.textContent = "Ready";
+    totalSeconds =
+        getInputSeconds();
+
+
+    status.textContent =
+        "Ready";
+
+
     updateDisplay();
+
 }
+
 
 
 function finishTimer() {
 
     running = false;
+
     clearInterval(interval);
+
 
     totalSeconds = 0;
 
+
     updateDisplay();
 
-    status.textContent = "⏰ Time's up!";
+
+    status.textContent =
+        "⏰ Time's up!";
+
 
     beep();
+
+
+    /*
+       Stop music if checkbox
+       is enabled
+    */
+
+    if (
+        document
+        .getElementById(
+            "stopMusicOnFinish"
+        )
+        .checked
+    ) {
+
+        music.pause();
+
+        music.currentTime = 0;
+
+        musicBtn.textContent =
+            "🎵 Play Music";
+
+    }
+
 }
 
 
-/* ---------- SOUND ---------- */
+/* =========================
+   TIMER SOUND
+========================= */
 
 function beep() {
 
     try {
 
         const audio =
-            new (window.AudioContext ||
-                 window.webkitAudioContext)();
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
 
         const oscillator =
             audio.createOscillator();
 
+
         const gain =
             audio.createGain();
 
-        oscillator.connect(gain);
-        gain.connect(audio.destination);
 
-        oscillator.frequency.value = 800;
-        oscillator.type = "sine";
+        oscillator.connect(gain);
+
+        gain.connect(
+            audio.destination
+        );
+
+
+        oscillator.frequency.value =
+            800;
+
+
+        oscillator.type =
+            "sine";
+
 
         gain.gain.setValueAtTime(
             0.3,
             audio.currentTime
         );
 
+
         oscillator.start();
+
 
         oscillator.stop(
             audio.currentTime + 0.6
         );
 
-    } catch (e) {
-        console.log("Sound unavailable");
     }
+
+    catch (e) {
+
+        console.log(
+            "Sound unavailable"
+        );
+
+    }
+
 }
 
 
-/* ---------- INPUTS ---------- */
+/* =========================
+   INPUTS
+========================= */
 
-[hours, minutes, seconds].forEach(input => {
+[
+    hours,
+    minutes,
+    seconds
+]
+.forEach(input => {
 
-    input.addEventListener("input", () => {
+    input.addEventListener(
+        "input",
+        () => {
 
-        if (!running) {
+            if (!running) {
 
-            totalSeconds = getInputSeconds();
+                totalSeconds =
+                    getInputSeconds();
 
-            updateDisplay();
+                updateDisplay();
+
+            }
 
         }
-
-    });
+    );
 
 });
 
 
-/* ---------- BUTTONS ---------- */
+/* =========================
+   TIMER BUTTONS
+========================= */
 
-document.getElementById("start")
-    .addEventListener("click", startTimer);
-
-document.getElementById("pause")
-    .addEventListener("click", pauseTimer);
-
-document.getElementById("reset")
-    .addEventListener("click", resetTimer);
+document
+    .getElementById("start")
+    .addEventListener(
+        "click",
+        startTimer
+    );
 
 
-/* ---------- SAVED TIMERS ---------- */
+document
+    .getElementById("pause")
+    .addEventListener(
+        "click",
+        pauseTimer
+    );
+
+
+document
+    .getElementById("reset")
+    .addEventListener(
+        "click",
+        resetTimer
+    );
+
+
+
+/* =========================
+   SAVED TIMERS
+========================= */
 
 function getSavedTimers() {
 
     return JSON.parse(
-        localStorage.getItem("myTimers") || "[]"
+        localStorage.getItem(
+            "myTimers"
+        ) || "[]"
     );
 
 }
 
 
+
 function saveTimer() {
 
     let name =
-        document.getElementById("timerName")
-        .value.trim();
+        document
+        .getElementById("timerName")
+        .value
+        .trim();
+
 
     if (!name) {
-        name = formatTime(getInputSeconds());
+
+        name =
+            formatTime(
+                getInputSeconds()
+            );
+
     }
 
-    let time = getInputSeconds();
+
+    let time =
+        getInputSeconds();
+
 
     if (time <= 0) {
-        alert("Set a timer first!");
+
+        alert(
+            "Set a timer first!"
+        );
+
         return;
+
     }
 
-    let timers = getSavedTimers();
+
+    let timers =
+        getSavedTimers();
+
 
     timers.push({
+
         name: name,
+
         seconds: time
+
     });
+
 
     localStorage.setItem(
         "myTimers",
         JSON.stringify(timers)
     );
 
-    document.getElementById("timerName").value = "";
+
+    document
+        .getElementById("timerName")
+        .value = "";
+
 
     renderSavedTimers();
+
 }
+
 
 
 function loadTimer(time) {
 
     totalSeconds = time;
 
+
     hours.value =
-        Math.floor(time / 3600);
+        Math.floor(
+            time / 3600
+        );
+
 
     minutes.value =
-        Math.floor((time % 3600) / 60);
+        Math.floor(
+            (time % 3600) / 60
+        );
+
 
     seconds.value =
         time % 60;
 
+
     running = false;
+
     clearInterval(interval);
 
-    status.textContent = "Loaded";
+
+    status.textContent =
+        "Loaded";
+
+
     updateDisplay();
+
 }
+
 
 
 function deleteTimer(index) {
 
-    let timers = getSavedTimers();
+    let timers =
+        getSavedTimers();
 
-    timers.splice(index, 1);
+
+    timers.splice(
+        index,
+        1
+    );
+
 
     localStorage.setItem(
         "myTimers",
         JSON.stringify(timers)
     );
 
+
     renderSavedTimers();
+
 }
+
 
 
 function renderSavedTimers() {
 
     savedList.innerHTML = "";
 
-    let timers = getSavedTimers();
+
+    let timers =
+        getSavedTimers();
+
 
     if (timers.length === 0) {
 
@@ -543,95 +1055,259 @@ function renderSavedTimers() {
             "<span style='opacity:.6'>No saved timers yet.</span>";
 
         return;
+
     }
 
-    timers.forEach((timer, index) => {
 
-        let wrapper =
-            document.createElement("div");
+    timers.forEach(
+        (timer,index) => {
 
-        wrapper.className = "saved-item";
 
-        let button =
-            document.createElement("button");
+            let wrapper =
+                document.createElement(
+                    "div"
+                );
 
-        button.textContent =
-            timer.name;
 
-        button.addEventListener(
-            "click",
-            () => loadTimer(timer.seconds)
-        );
+            wrapper.className =
+                "saved-item";
 
-        let deleteButton =
-            document.createElement("button");
 
-        deleteButton.textContent = "×";
+            let button =
+                document.createElement(
+                    "button"
+                );
 
-        deleteButton.className = "delete";
 
-        deleteButton.addEventListener(
-            "click",
-            () => deleteTimer(index)
-        );
+            button.textContent =
+                timer.name;
 
-        wrapper.appendChild(button);
-        wrapper.appendChild(deleteButton);
 
-        savedList.appendChild(wrapper);
+            button.addEventListener(
+                "click",
+                () => loadTimer(
+                    timer.seconds
+                )
+            );
 
-    });
+
+            let deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.textContent =
+                "×";
+
+
+            deleteButton.className =
+                "delete";
+
+
+            deleteButton.addEventListener(
+                "click",
+                () => deleteTimer(
+                    index
+                )
+            );
+
+
+            wrapper.appendChild(
+                button
+            );
+
+
+            wrapper.appendChild(
+                deleteButton
+            );
+
+
+            savedList.appendChild(
+                wrapper
+            );
+
+        }
+    );
 
 }
 
 
-document.getElementById("save")
-    .addEventListener("click", saveTimer);
+document
+    .getElementById("save")
+    .addEventListener(
+        "click",
+        saveTimer
+    );
 
 
-/* ---------- DARK MODE ---------- */
+
+/* =========================
+   DARK MODE
+========================= */
+
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
 
 function applyTheme() {
 
     let dark =
-        localStorage.getItem("darkMode") === "true";
+        localStorage.getItem(
+            "darkMode"
+        ) === "true";
+
 
     document.body.classList.toggle(
         "dark",
         dark
     );
 
-    document.getElementById("themeBtn")
-        .textContent =
-        dark ? "☀️ Light" : "🌙 Dark";
+
+    themeBtn.textContent =
+        dark
+        ? "☀️ Light"
+        : "🌙 Dark";
+
 }
 
 
-document.getElementById("themeBtn")
-    .addEventListener("click", () => {
+
+themeBtn.addEventListener(
+    "click",
+    () => {
 
         let dark =
-            !document.body.classList.contains("dark");
+            !document.body.classList.contains(
+                "dark"
+            );
+
 
         document.body.classList.toggle(
             "dark",
             dark
         );
 
+
         localStorage.setItem(
             "darkMode",
             dark
         );
 
+
         applyTheme();
 
-    });
+    }
+);
 
 
-/* ---------- INITIALIZE ---------- */
+
+/* =========================
+   MUSIC
+========================= */
+
+const music =
+    document.getElementById(
+        "backgroundMusic"
+    );
+
+
+const musicBtn =
+    document.getElementById(
+        "musicBtn"
+    );
+
+
+const volume =
+    document.getElementById(
+        "volume"
+    );
+
+
+
+music.volume =
+    Number(
+        localStorage.getItem(
+            "musicVolume"
+        ) || 0.5
+    );
+
+
+volume.value =
+    music.volume;
+
+
+
+musicBtn.addEventListener(
+    "click",
+    () => {
+
+
+        if (music.paused) {
+
+            music.play()
+
+            .then(() => {
+
+                musicBtn.textContent =
+                    "⏸ Pause Music";
+
+            })
+
+            .catch(() => {
+
+                status.textContent =
+                    "Click Play Music again to start the song.";
+
+            });
+
+        }
+
+        else {
+
+            music.pause();
+
+
+            musicBtn.textContent =
+                "🎵 Play Music";
+
+        }
+
+    }
+);
+
+
+
+volume.addEventListener(
+    "input",
+    () => {
+
+        music.volume =
+            Number(
+                volume.value
+            );
+
+
+        localStorage.setItem(
+            "musicVolume",
+            volume.value
+        );
+
+    }
+);
+
+
+
+/* =========================
+   INITIALIZE
+========================= */
 
 applyTheme();
+
 renderSavedTimers();
+
 updateDisplay();
 
 </script>
